@@ -11,7 +11,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена за продукт')
     created_at = models.DateField(auto_now_add=True, verbose_name='Дата создания')
     updated_at = models.DateField(auto_now=True, verbose_name='Дата последнего изменения')
-    manufactured_at = models.DateField(auto_now=True, verbose_name='Дата производства продукта')
+
 
 
     def __str__(self):
