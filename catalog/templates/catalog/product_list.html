@@ -3,7 +3,6 @@
 {% block content %}
 <div class="container">
     <div class="row text-center">
-        {% for product in products %}
         <div class="col-3">
             <div class="card mb-4 box-shadow">
                 <div class="card-header">
@@ -15,11 +14,11 @@
                     <ul class="list-unstyled mt-3 mb-4 text-start m-3">
                         <li>{{product.description | truncatechars:100}}</li>
                     </ul>
-                    <a class="btn btn-primary" href='{% url "catalog:product_detail" product.pk %}' role="button">подробнее</a>
+                    <a class="btn btn-primary" href='{% url "catalog:home" %}' role="button">назад</a>
                 </div>
             </div>
         </div>
-        {% endfor %}
+
     </div>
 </div>
 {% endblock %}
