@@ -40,3 +40,20 @@ def user_verify(request, token):
     user.is_active = True
     user.save()
     return redirect(reverse('users:login'))
+
+
+def restore_password(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        user = User.objects.get(email=email)
+        new_password = ''.join(random.choices('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890',
+                                              k=12))
+        user.password = make_password(new_password)
+        user.save()
+        send_mail(
+            subject='Восстановление пароля',
+            message=f'Вот ваш новый пароль {new_password}',
+            from_email=EMAIL_HOST_USER,
+            recipient_list=[user.email])
+        return redirect(reverse('users:login'))
+    return render(request, 'users/password_restore.html')
