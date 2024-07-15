@@ -1,4 +1,6 @@
+from django.contrib.auth.mixins import AccessMixin, LoginRequiredMixin
 from django.forms import inlineformset_factory
+from django.http import HttpResponseForbidden
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
 
@@ -6,13 +8,35 @@ from catalog.forms import ProductForm, VersionForm
 from catalog.models import Product, Version
 
 
-class ProductCreateView(CreateView):
+class OwnerRequiredMixin(AccessMixin):
+    """
+    миксин для проверки владельца продукта.
+    """
+
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.owner != self.request.user:
+            return self.handle_no_permission()
+        return super().dispatch(request, *args, **kwargs)
+
+    def handle_no_permission(self):
+        return HttpResponseForbidden("У вас нет доступа к редактированию, удалению продуктов.")
+
+
+class ProductCreateView(CreateView, LoginRequiredMixin):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:product_list')
 
+    def form_valid(self, form):
+        product = form.save()
+        user = self.request.user
+        product.owner = user
+        product.save()
+        return super().form_valid(form)
 
-class ProductUpdateView(UpdateView):
+
+class ProductUpdateView(UpdateView, OwnerRequiredMixin):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:product_list')
@@ -56,7 +80,7 @@ class ProductDetailView(DetailView):
     model = Product
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(DeleteView, OwnerRequiredMixin):
     model = Product
     success_url = reverse_lazy('catalog:product_list')
 
