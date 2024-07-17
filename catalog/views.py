@@ -36,7 +36,7 @@ class ProductCreateView(CreateView, LoginRequiredMixin):
         return super().form_valid(form)
 
 
-class ProductUpdateView(UpdateView, OwnerRequiredMixin):
+class ProductUpdateView(UpdateView, LoginRequiredMixin, OwnerRequiredMixin):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:product_list')
@@ -76,11 +76,11 @@ class ProductListView(ListView):
         return context
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(DetailView, LoginRequiredMixin):
     model = Product
 
 
-class ProductDeleteView(DeleteView, OwnerRequiredMixin):
+class ProductDeleteView(DeleteView, LoginRequiredMixin, OwnerRequiredMixin):
     model = Product
     success_url = reverse_lazy('catalog:product_list')
 
