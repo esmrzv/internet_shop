@@ -16,8 +16,8 @@
                         <li>{{product.description | truncatechars:100}}</li>
                     </ul>
                     <p> Активная версия: {{ product.active_version }} </p>
-                    {% if user.is_authenticated %}
                     <a class="btn btn-primary" href='{% url "catalog:product_detail" product.pk %}' role="button">подробнее</a>
+      {% if perms.catalog.can_change_is_published or perms.catalog.can_change_description or perms.catalog.can_change_category or user == product.owner %}
                     <a class="btn btn-primary" href='{% url "catalog:product_update" product.pk %}' role="button">редактировать</a>
                     <a class="btn btn-primary" href='{% url "catalog:product_delete" product.pk %}' role="button">удалить</a>
                     {% endif %}
