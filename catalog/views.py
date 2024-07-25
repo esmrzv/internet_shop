@@ -7,7 +7,7 @@ from django.views.generic import ListView, DetailView, TemplateView, CreateView,
 
 from catalog.forms import ProductForm, VersionForm, ProductManageForm
 from catalog.models import Product, Version
-from catalog.services import get_category_from_cache
+from catalog.services import get_products_from_cache
 
 
 class OwnerRequiredMixin(AccessMixin):
@@ -87,7 +87,7 @@ class ProductListView(ListView):
         return context
 
     def get_queryset(self):
-        return get_category_from_cache()
+        return get_products_from_cache()
 
 
 class ProductDetailView(DetailView, LoginRequiredMixin):
@@ -102,6 +102,3 @@ class ProductDeleteView(DeleteView, LoginRequiredMixin, OwnerRequiredMixin):
 class ContactsView(TemplateView):
     template_name = "catalog/contacts.html"
 
-# class VersionListView(ListView):
-#     model = Version
-#     form_class = VersionForm

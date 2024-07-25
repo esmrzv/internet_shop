@@ -4,19 +4,7 @@ from catalog.models import Product
 from config.settings import CACHE_ENABLED
 
 
-# def get_products_from_cache():
-#     if not CACHED_ENABLED:
-#         return Product.objects.all()
-#     key = 'product_list'
-#     product = cache.get(key)
-#     if product is not None:
-#         return product
-#     product = Product.objects.all()
-#     cache.set(key, product)
-#     return product
-
-
-def get_category_from_cache():
+def get_products_from_cache():
     """
     Возвращает список продуктов из кэша или из базы,
     если кэш не включен.
