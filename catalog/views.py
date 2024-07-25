@@ -7,6 +7,7 @@ from django.views.generic import ListView, DetailView, TemplateView, CreateView,
 
 from catalog.forms import ProductForm, VersionForm, ProductManageForm
 from catalog.models import Product, Version
+from catalog.services import get_category_from_cache
 
 
 class OwnerRequiredMixin(AccessMixin):
@@ -84,6 +85,9 @@ class ProductListView(ListView):
             else:
                 product.active_version = 'Нет активной версии'
         return context
+
+    def get_queryset(self):
+        return get_category_from_cache()
 
 
 class ProductDetailView(DetailView, LoginRequiredMixin):
